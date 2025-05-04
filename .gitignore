@@ -1,0 +1,5 @@
+.env
+day_counter.txt
+totals.json
+__pycache__/
+*.pyc
