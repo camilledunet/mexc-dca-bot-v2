@@ -242,8 +242,8 @@ try:
             print(f"Erreur dans buy_coins: {e}", flush=True)
 
     # Planification quotidienne à 17:00 CEST (15:00 UTC)
-    schedule.every().day.at("17:30").do(buy_coins)
-    print("Tâche planifiée à 15:30 UTC (17:30 CEST, Francfort)", flush=True)
+    schedule.every().day.at("17:55").do(buy_coins)
+    print("Tâche planifiée à 15:55 UTC (17:55 CEST, Francfort)", flush=True)
 
     def main():
         try:
