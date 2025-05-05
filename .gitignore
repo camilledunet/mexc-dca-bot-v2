@@ -1,5 +1,6 @@
 .env
-day_counter.txt
-totals.json
+data/*
+!data/totals.json
+!data/day_counter.txt
 __pycache__/
 *.pyc

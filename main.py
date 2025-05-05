@@ -102,7 +102,7 @@ try:
             with open(TOTALS_FILE, 'r') as f:
                 totals = json.load(f)
                 print(f"Totaux chargés: {totals}", flush=True)
-                # Restaurer les totaux
+                # Restaurer les totaux pour 7 jours (Jour 1-6 + Jour 8)
                 day_counter = load_day_counter()
                 if totals['BTC']['total_invested'] < 5.0 * day_counter:
                     missing_days = day_counter - int(totals['BTC']['total_invested'] / 5.0)
@@ -123,7 +123,7 @@ try:
                     print(f"Restauration ATR: Quantité: {totals['ATR']['total_quantity']:.6f}, Investi: ${totals['ATR']['total_invested']:.2f}", flush=True)
                 return totals
         except FileNotFoundError:
-            print("Totaux non trouvés, initialisation avec 6 jours", flush=True)
+            print("Totaux non trouvés, initialisation avec 7 jours", flush=True)
             day_counter = load_day_counter()
             totals = {
                 'BTC': {'total_quantity': day_counter * (5.0 / 95627.87), 'total_invested': day_counter * 5.0},
@@ -172,13 +172,14 @@ try:
             # if last_execution == today:
             #     print("Achat déjà effectué aujourd'hui, passage", flush=True)
             #     return
+            today = datetime.now(timezone.utc).strftime("%Y-%m-%d")  # Défini pour save_last_execution
 
             day_counter = load_day_counter()
             totals = load_totals()
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
             unique_id = random.randint(1000, 9999)
             tweet_message = (
-                f"DCA Jour {day_counter}, J'achète quotidiennement 5$ $BTC, 1$ $BKN et 1$ $ATR (code parrainage MEXC: 12KxM2):\n"
+                f"DCA Jour {day_counter}, Achat 5$ BTC, 1$ BKN, 1$ ATR (code MEXC: 12KxM2):\n"
             )
             print(f"Début de buy_coins, jour {day_counter}", flush=True)
 
@@ -198,15 +199,14 @@ try:
                     market = mexc.market(symbol)
                     if quantity < market['limits']['amount']['min']:
                         print(f"Quantité pour {symbol} trop faible : {quantity} (min: {market['limits']['amount']['min']})", flush=True)
-                        tweet_message += f"- {name}: Échec (quantité trop faible)\n"
+                        tweet_message += f"- {name}: Échec (quantité faible)\n"
                         continue
                     if amount_usd < market['limits']['cost']['min']:
                         print(f"Coût pour {symbol} trop faible : ${amount_usd} (min: ${market['limits']['cost']['min']})", flush=True)
-                        tweet_message += f"- {name}: Échec (coût trop faible)\n"
+                        tweet_message += f"- {name}: Échec (coût faible)\n"
                         continue
 
                     print(f"Exécution de l'achat pour {symbol}, quantité: {quantity:.{total_decimals}f}", flush=True)
-                    # Désactiver l'exigence de prix pour les ordres au marché
                     order = mexc.create_market_buy_order(symbol, amount_usd, {'createMarketBuyOrderRequiresPrice': False})
                     print(f"Achat réel effectué : {symbol}, Quantité: {quantity:.{total_decimals}f}, Coût: ${amount_usd:.2f}", flush=True)
 
@@ -217,21 +217,21 @@ try:
                     price_change = ((current_value - total_invested) / total_invested) * 100 if total_invested > 0 else 0
 
                     tweet_message += (
-                        f"- {name}: {quantity:.{decimals}f}, ${amount_usd:.2f}, Tot {totals[name]['total_quantity']:.{total_decimals}f}, ${total_invested:.2f}, {price_change:+.2f}%\n"
+                        f"- {name}: {quantity:.4f}, ${amount_usd:.2f}, Tot {totals[name]['total_quantity']:g}, ${total_invested:.2f}, {price_change:+.1f}%\n"
                     )
 
                 except Exception as e:
                     print(f"Erreur lors de l'achat de {symbol}: {str(e)}", flush=True)
                     tweet_message += f"- {name}: Erreur\n"
 
-            tweet_message += "\n#Crypto #DCA #Bitcoin #MEXC #Investing"
+            tweet_message += "#Crypto #DCA #Bitcoin #MEXC"
 
             if len(tweet_message) > 280:
                 print(f"Erreur : Message trop long ({len(tweet_message)} caractères)", flush=True)
                 tweet_message = (
-                    f"DCA Jour {day_counter}, J'achète quotidiennement 5$ $BTC, 1$ $BKN et 1$ $ATR (code MEXC: 12KxM2):\n"
+                    f"DCA Jour {day_counter}, Achat 5$ BTC, 1$ BKN, 1$ ATR (code MEXC: 12KxM2):\n"
                     "Erreur lors de certains achats\n"
-                    "#Crypto #DCA #Bitcoin #MEXC #Investing"
+                    "#Crypto #DCA #Bitcoin #MEXC"
                 )
 
             if post_tweet(tweet_message):
@@ -242,9 +242,9 @@ try:
         except Exception as e:
             print(f"Erreur dans buy_coins: {e}", flush=True)
 
-    # Planification quotidienne à 08:05 CEST (06:05 UTC)
-    schedule.every().day.at("06:05").do(buy_coins)
-    print("Tâche planifiée à 06:05 UTC (08:05 CEST, Francfort)", flush=True)
+    # Planification quotidienne à 08:25 CEST (06:25 UTC)
+    schedule.every().day.at("06:25").do(buy_coins)
+    print("Tâche planifiée à 06:25 UTC (08:25 CEST, Francfort)", flush=True)
 
     def main():
         try:
