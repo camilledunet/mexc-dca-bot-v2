@@ -166,12 +166,12 @@ try:
 
     def buy_coins():
         try:
-            # Vérifier si déjà exécuté aujourd'hui
-            today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-            last_execution = load_last_execution()
-            if last_execution == today:
-                print("Achat déjà effectué aujourd'hui, passage", flush=True)
-                return
+            # Vérifier si déjà exécuté aujourd'hui (désactivé pour tests)
+            # today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            # last_execution = load_last_execution()
+            # if last_execution == today:
+            #     print("Achat déjà effectué aujourd'hui, passage", flush=True)
+            #     return
 
             day_counter = load_day_counter()
             totals = load_totals()
@@ -206,7 +206,8 @@ try:
                         continue
 
                     print(f"Exécution de l'achat pour {symbol}, quantité: {quantity:.{total_decimals}f}", flush=True)
-                    order = mexc.create_market_buy_order(symbol, quantity)
+                    # Désactiver l'exigence de prix pour les ordres au marché
+                    order = mexc.create_market_buy_order(symbol, amount_usd, {'createMarketBuyOrderRequiresPrice': False})
                     print(f"Achat réel effectué : {symbol}, Quantité: {quantity:.{total_decimals}f}, Coût: ${amount_usd:.2f}", flush=True)
 
                     totals[name]['total_quantity'] += quantity
@@ -241,9 +242,9 @@ try:
         except Exception as e:
             print(f"Erreur dans buy_coins: {e}", flush=True)
 
-    # Planification quotidienne à 07:55 CEST (05:55 UTC)
-    schedule.every().day.at("05:55").do(buy_coins)
-    print("Tâche planifiée à 05:55 UTC (07:55 CEST, Francfort)", flush=True)
+    # Planification quotidienne à 08:05 CEST (06:05 UTC)
+    schedule.every().day.at("06:05").do(buy_coins)
+    print("Tâche planifiée à 06:05 UTC (08:05 CEST, Francfort)", flush=True)
 
     def main():
         try:
