@@ -212,7 +212,7 @@ try:
                     totals[name]['total_quantity'] += quantity
                     totals[name]['total_invested'] += amount_usd
                     current_value = totals[name]['total_quantity'] * price
-                    total_invested = totals['BKN']['total_invested']
+                    total_invested = totals[name]['total_invested']
                     price_change = ((current_value - total_invested) / total_invested) * 100 if total_invested > 0 else 0
 
                     tweet_message += (
@@ -241,9 +241,9 @@ try:
         except Exception as e:
             print(f"Erreur dans buy_coins: {e}", flush=True)
 
-    # Planification quotidienne à 17:00 CEST (15:00 UTC)
-    schedule.every().day.at("17:55").do(buy_coins)
-    print("Tâche planifiée à 15:55 UTC (17:55 CEST, Francfort)", flush=True)
+    # Planification quotidienne à 07:55 CEST (05:55 UTC)
+    schedule.every().day.at("05:55").do(buy_coins)
+    print("Tâche planifiée à 05:55 UTC (07:55 CEST, Francfort)", flush=True)
 
     def main():
         try:
