@@ -173,6 +173,7 @@ try:
             #     print("Achat déjà effectué aujourd'hui, passage", flush=True)
             #     return
             today = datetime.now(timezone.utc).strftime("%Y-%m-%d")  # Défini pour save_last_execution
+            print(f"Date utilisée pour buy_coins: {today}", flush=True)
 
             day_counter = load_day_counter()
             totals = load_totals()
@@ -242,9 +243,9 @@ try:
         except Exception as e:
             print(f"Erreur dans buy_coins: {e}", flush=True)
 
-    # Planification quotidienne à 08:25 CEST (06:25 UTC)
-    schedule.every().day.at("06:25").do(buy_coins)
-    print("Tâche planifiée à 06:25 UTC (08:25 CEST, Francfort)", flush=True)
+    # Planification quotidienne à 08:38 CEST (06:38 UTC)
+    schedule.every().day.at("06:38").do(buy_coins)
+    print("Tâche planifiée à 06:38 UTC (08:38 CEST, Francfort)", flush=True)
 
     def main():
         try:
