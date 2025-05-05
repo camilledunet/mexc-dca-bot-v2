@@ -243,9 +243,9 @@ try:
         except Exception as e:
             print(f"Erreur dans buy_coins: {e}", flush=True)
 
-    # Planification quotidienne à 08:50 CEST (06:50 UTC)
-    schedule.every().day.at("06:50").do(buy_coins)
-    print("Tâche planifiée à 06:50 UTC (08:50 CEST, Francfort)", flush=True)
+    # Planification quotidienne à 09:05 CEST (07:05 UTC)
+    schedule.every().day.at("07:05").do(buy_coins)
+    print("Tâche planifiée à 07:05 UTC (09:05 CEST, Francfort)", flush=True)
 
     def main():
         try:
