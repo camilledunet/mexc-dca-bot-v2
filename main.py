@@ -27,7 +27,7 @@ try:
     print(f"Clés Twitter: API_KEY={bool(TWITTER_API_KEY)}, ACCESS_TOKEN={bool(TWITTER_ACCESS_TOKEN)}", flush=True)
 
     COINS = [
-        {'symbol': 'LBTC/USDT', 'amount_usd': 5.0, 'name': 'LBTC', 'decimals': 6, 'total_decimals': 6},  # Temporaire
+        {'symbol': 'BTC/USDC', 'amount_usd': 5.0, 'name': 'BTC', 'decimals': 6, 'total_decimals': 6},
         {'symbol': 'BKN/USDT', 'amount_usd': 1.002, 'name': 'BKN', 'decimals': 6, 'total_decimals': 6},
         {'symbol': 'ATR/USDT', 'amount_usd': 1.002, 'name': 'ATR', 'decimals': 6, 'total_decimals': 6},
     ]
@@ -94,7 +94,7 @@ try:
 
     def load_totals():
         expected_totals = {
-            'LBTC': {'total_quantity': 0.000477, 'total_invested': 45.0},
+            'BTC': {'total_quantity': 0.000476, 'total_invested': 45.0},
             'BKN': {'total_quantity': 47.862783, 'total_invested': 9.018},
             'ATR': {'total_quantity': 437.078686, 'total_invested': 9.018}
         }
@@ -150,7 +150,7 @@ try:
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
             unique_id = random.randint(1000, 9999)
             tweet_message = (
-                f"DCA Jour {day_counter}, Achat 5$ LBTC, 1$ BKN, 1$ ATR (code MEXC: 12KxM2):\n"
+                f"DCA Jour {day_counter}, Achat 5$ BTC, 1$ BKN, 1$ ATR (code MEXC: 12KxM2):\n"
             )
             print(f"Début de buy_coins, jour {day_counter}", flush=True)
 
@@ -208,7 +208,7 @@ try:
             if len(tweet_message) > 280:
                 print(f"Erreur : Message trop long ({len(tweet_message)} caractères)", flush=True)
                 tweet_message = (
-                    f"DCA Jour {day_counter}, Achat 5$ LBTC, 1$ BKN, 1$ ATR (code MEXC: 12KxM2):\n"
+                    f"DCA Jour {day_counter}, Achat 5$ BTC, 1$ BKN, 1$ ATR (code MEXC: 12KxM2):\n"
                     "Erreur lors de certains achats\n"
                     "#Crypto #DCA #Bitcoin #MEXC"
                 )
@@ -221,8 +221,8 @@ try:
         except Exception as e:
             print(f"Erreur dans buy_coins: {e}", flush=True)
 
-    schedule.every().day.at("07:20").do(buy_coins)
-    print("Tâche planifiée à 07:20 UTC (09:20 CEST, Francfort)", flush=True)
+    schedule.every().day.at("09:30").do(buy_coins)
+    print("Tâche planifiée à 09:30 UTC (11:30 CEST, Francfort)", flush=True)
 
     def main():
         try:
