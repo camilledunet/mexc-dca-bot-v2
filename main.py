@@ -55,11 +55,11 @@ try:
                 print(f"Compteur chargé: {counter}", flush=True)
                 return counter
         except FileNotFoundError:
-            print("Compteur non trouvé, initialisation à 9", flush=True)
-            return 9
+            print("Compteur non trouvé, initialisation à 12", flush=True)
+            return 12
         except Exception as e:
             print(f"Erreur lors du chargement du compteur: {e}", flush=True)
-            return 9
+            return 12
 
     def save_day_counter(counter):
         try:
@@ -94,9 +94,9 @@ try:
 
     def load_totals():
         expected_totals = {
-            'BTC': {'total_quantity': 0.000476, 'total_invested': 45.0},
-            'BKN': {'total_quantity': 47.862783, 'total_invested': 9.018},
-            'ATR': {'total_quantity': 437.078686, 'total_invested': 9.018}
+            'BTC': {'total_quantity': 0.000634, 'total_invested': 60.0},
+            'BKN': {'total_quantity': 64.833369, 'total_invested': 12.024},
+            'ATR': {'total_quantity': 586.846008, 'total_invested': 12.024}
         }
         try:
             with open(TOTALS_FILE, 'r') as f:
@@ -104,7 +104,7 @@ try:
                 print(f"Totaux chargés: {totals}", flush=True)
                 return totals
         except FileNotFoundError:
-            print("Totaux non trouvés, initialisation pour Jour 9", flush=True)
+            print("Totaux non trouvés, initialisation pour Jour 12", flush=True)
             save_totals(expected_totals)
             return expected_totals
         except Exception as e:
